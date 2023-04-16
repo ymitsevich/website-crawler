@@ -1,0 +1,24 @@
+parameters:
+  app.storage.target_dir: '%env(default:app.storage.target_dir_default:string:APP_STORAGE_TARGET_DIR)%'
+  app.storage.target_dir_default: /app/var/
+
+  app.links.max: '%env(default:app.links.max_default:int:APP_LINKS_MAX)%'
+  app.links.max_default: 100
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+
+  App\WebCrawler\LinkSeeker\BreadthFirstLinkSeeker:
+    arguments:
+      $maxLinks: '%app.links.max%'
+  App\WebCrawler\PageSaver\FilesystemPageSaver:
+    arguments:
+      $targetDir: '%app.storage.target_dir%'

@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  app:
+    container_name: webcrw-app
+    build:
+      context: .
+      dockerfile: .infra/php/Dockerfile
+      target: dev
+    volumes:
+      - ./app:/app:delegated
+    working_dir: /app
+    environment:
+      XDEBUG_CONFIG: idekey=PHPSTORM
+      PHP_IDE_CONFIG: serverName=serv
+    restart: on-failure
+    networks:
+      - app_network
+  worker:
+    container_name: webcrw-worker
+    build:
+      context: .
+      dockerfile: .infra/php/Dockerfile
+      target: worker
+    volumes:
+      - ./app:/app:delegated
+      - ./.infra/worker/supervisor-messenger.ini:/etc/supervisor.d/supervisor-messenger.ini:delegated
+    working_dir: /app
+    environment:
+      XDEBUG_CONFIG: idekey=PHPSTORM
+      PHP_IDE_CONFIG: serverName=serv
+      WORKER_NUMPROCS: '5'
+    restart: on-failure
+    networks:
+      - app_network
+  mq:
+    container_name: webcrw-mq
+    image: rabbitmq:management-alpine
+    restart: on-failure
+    hostname: mq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    volumes:
+      - .data/rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - app_network
+
+networks:
+  app_network:

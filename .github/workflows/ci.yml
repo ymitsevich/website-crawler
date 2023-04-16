@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: make build-prod
+
+      - name: Test
+        run: make test
+
+      - name: Login to Docker registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag and push Docker image
+        run: |
+          docker tag website-crawler-app:latest ghcr.io/ymitsevich/website-crawler-app:latest
+          docker push ghcr.io/ymitsevich/website-crawler-app:latest

@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  app:
+    container_name: webcrw-app
+    build:
+      context: .
+      dockerfile: .infra/php/Dockerfile
+      target: base
+      args:
+        APP_ENV: prod
+    working_dir: /app
+  worker:
+    container_name: webcrw-worker
+    build:
+      context: .
+      dockerfile: .infra/php/Dockerfile
+      target: worker
+      args:
+        APP_ENV: prod
+    working_dir: /app

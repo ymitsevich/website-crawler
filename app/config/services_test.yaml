@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+
+  App\WebCrawler\PageFetcher\PageFetcher:
+    public: true
+  App\WebCrawler\PageSaver\PageSaver:
+    public: true
