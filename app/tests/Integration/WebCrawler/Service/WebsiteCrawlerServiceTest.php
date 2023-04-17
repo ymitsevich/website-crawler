@@ -3,7 +3,7 @@
 namespace App\Test\Integration\WebCrawler\Service;
 
 use App\WebCrawler\Dto\Page;
-use App\WebCrawler\LinkSeeker\LinkNormalizer;
+use App\WebCrawler\Link\LinkNormalizer;
 use App\WebCrawler\PageFetcher\PageFetcher;
 use App\WebCrawler\PageSaver\PageSaver;
 use App\WebCrawler\Service\WebsiteCrawlerService;
@@ -91,8 +91,25 @@ class WebsiteCrawlerServiceTest extends KernelTestCase
         ];
 
         return [
-            [$hierarchy, $referencingPositive, $referencingNegative],
+            'maxLinksReached_shouldStopCrawling' => [$hierarchy, $referencingPositive, $referencingNegative],
         ];
+    }
+
+    public function testProcessWithEmptyHierarchy()
+    {
+        $mainLink = 'https://test.ua';
+
+        $this->craftLinksHierarchy([$mainLink => []]);
+        $this->pageSaver->save(
+            Argument::that(function (Page $page) use ($mainLink): Page {
+                Assert::assertEquals($page->getName(), $mainLink);
+
+                return $page;
+            }),
+            $mainLink
+        );
+
+        $this->service->process($mainLink);
     }
 
     private function craftLinksHierarchy(array $urlToContentFileNameMapping): void

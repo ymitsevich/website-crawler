@@ -1,8 +1,8 @@
 <?php
 
-namespace App\WebCrawler\LinkSeeker;
+namespace App\WebCrawler\Link;
 
-readonly class LinkNormalizer
+class LinkNormalizer
 {
     public function process(mixed $link, string $mainLink): string
     {

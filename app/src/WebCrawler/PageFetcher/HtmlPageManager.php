@@ -3,12 +3,15 @@
 namespace App\WebCrawler\PageFetcher;
 
 use DOMDocument;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 readonly class HtmlPageManager implements PageManager
 {
-    public function __construct(private PageFetcher $pageFetcher)
-    {
+    public function __construct(
+        private PageFetcher $pageFetcher,
+        private LoggerInterface $logger
+    ) {
     }
 
     public function getLinksByLink(string $targetLink): ?array
@@ -27,7 +30,8 @@ readonly class HtmlPageManager implements PageManager
 
             return $newLinks;
         } catch (Throwable $e) {
-            // @todo log
+            $this->logger->error($e->getMessage());
+
             return null;
         }
     }

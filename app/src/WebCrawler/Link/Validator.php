@@ -1,8 +1,8 @@
 <?php
 
-namespace App\WebCrawler\Validator;
+namespace App\WebCrawler\Link;
 
-readonly class Validator
+class Validator
 {
     public function isValidLink(string $link, ?string $mainLink = null): bool
     {

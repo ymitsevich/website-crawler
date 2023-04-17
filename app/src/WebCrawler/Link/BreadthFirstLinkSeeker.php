@@ -1,8 +1,7 @@
 <?php
 
-namespace App\WebCrawler\LinkSeeker;
+namespace App\WebCrawler\Link;
 
-use App\WebCrawler\Validator\Validator;
 use App\WebCrawler\PageFetcher\PageManager;
 
 readonly class BreadthFirstLinkSeeker implements LinkSeeker

@@ -16,7 +16,7 @@ services:
       - '../src/Entity/'
       - '../src/Kernel.php'
 
-  App\WebCrawler\LinkSeeker\BreadthFirstLinkSeeker:
+  App\WebCrawler\Link\BreadthFirstLinkSeeker:
     arguments:
       $maxLinks: '%app.links.max%'
   App\WebCrawler\PageSaver\FilesystemPageSaver:

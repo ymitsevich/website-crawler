@@ -1,6 +1,6 @@
 <?php
 
-namespace App\WebCrawler\LinkSeeker;
+namespace App\WebCrawler\Link;
 
 interface LinkSeeker
 {

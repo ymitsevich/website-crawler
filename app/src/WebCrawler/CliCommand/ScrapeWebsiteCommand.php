@@ -2,6 +2,7 @@
 
 namespace App\WebCrawler\CliCommand;
 
+use App\WebCrawler\Exception\ValidationException;
 use App\WebCrawler\Service\WebsiteCrawlerService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -40,7 +41,11 @@ class ScrapeWebsiteCommand extends Command
             $io->note(sprintf('You passed an argument: %s', $targetLink));
         }
 
-        $this->service->process($targetLink);
+        try {
+            $this->service->process($targetLink);
+        } catch (ValidationException) {
+            $io->error('Target link is invalid.');
+        }
 
         $io->success('The jobs have been put into the queue.');
 
