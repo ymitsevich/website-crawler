@@ -17,4 +17,4 @@ run-dev:
 	$(DOCKER_COMPOSE) -f docker-compose.dev.yml run --rm app bin/console scrape:website:run $(filter-out $@,$(MAKECMDGOALS))
 
 test:
-	$(DOCKER) run --rm -it website-crawler-app:latest vendor/bin/phpunit
+	$(DOCKER) run --rm --tty=false -it website-crawler-app:latest vendor/bin/phpunit
